@@ -1,1 +1,1 @@
-# GpuGems
+# learn gpu gems with gl
