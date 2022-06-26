@@ -1,8 +1,11 @@
 #include "Model.h"
+#include "NormalMesh.h"
 #include <iostream>
 
-Model::Model(const std::string& modelPath)
+Model::Model(const std::string& modelPath, Model_Type type, const std::string& shderPath)
 {
+    m_ShaderPath = shderPath;
+    m_Type = type;
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs);
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -19,7 +22,7 @@ void Model::SetPos(const glm::vec3& pos)
     m_Pos = pos;
     for (auto& mesh : m_Meshs)
     {
-        mesh.SetPosAndRotate(m_Pos, m_Rotate);
+        mesh->SetPosAndRotate(m_Pos, m_Rotate);
     }
 }
 
@@ -28,7 +31,7 @@ void Model::SetDir(const glm::vec3& dir)
     m_Rotate = dir;
     for (auto& mesh : m_Meshs)
     {
-        mesh.SetPosAndRotate(m_Pos, m_Rotate);
+        mesh->SetPosAndRotate(m_Pos, m_Rotate);
     }
 }
 
@@ -36,7 +39,7 @@ bool Model::Render(std::shared_ptr<Scene> scene)
 {
     for (auto& mesh : m_Meshs)
     {
-        mesh.Render(scene);
+        mesh->Render(scene);
     }
 
     return true;
@@ -46,14 +49,14 @@ void Model::SetDiffuseTexture(std::string textureName)
 {
     for (auto& mesh : m_Meshs)
     {
-        mesh.NormalMaterialInstance->SetValue("texture_diffuse", textureName);
+        mesh->NormalMaterialInstance->SetValue("texture_diffuse", textureName);
     }
 }
 
 #define SETALLMESHVALUE(paramName, value)   \
     for (auto& mesh : m_Meshs)  \
     {   \
-        mesh.NormalMaterialInstance->SetValue(paramName, value);    \
+        mesh->NormalMaterialInstance->SetValue(paramName, value);    \
     }
 
 void Model::SetValue(const std::string& paramName, int value)
@@ -113,7 +116,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
     }
 }
 
-Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+std::shared_ptr<Mesh> Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
     // data to fill
     std::vector<MeshVertex> vertices;
@@ -195,7 +198,13 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
     // return a mesh object created from the extracted mesh data
-    return Mesh(vertices, indices, textures);
+    switch (m_Type)
+    {
+    case Model_Type::Normal_Model:
+        return std::make_shared<NormalMesh>(m_ShaderPath, vertices, indices, textures);
+    default:
+        break;
+    }
 }
 
 std::vector<MeshTexture> Model::LoadMaterialTextures(aiMaterial* mat, aiTextureType type, MeshTexture::MeshTextureType typeName)

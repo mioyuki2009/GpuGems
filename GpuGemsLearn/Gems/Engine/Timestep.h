@@ -9,6 +9,7 @@ public:
 	}
 
 	operator float() { return m_Time; }
+	Timestep& operator +=(const Timestep& rhs) { m_Time += rhs.m_Time; return *this; }
 
 	float GetSeconds() const { return m_Time; }
 	float GetMilliseconds() const { return m_Time * 1000.0f; }

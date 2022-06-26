@@ -55,7 +55,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../../vendor/GLFW/include;../../vendor/glm;../../vendor/GLAD/include;../../vendor/stb_image;../../vendor/assimp/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../vendor/GLFW/include;../../vendor/glm;../../vendor/GLAD/include;../../vendor/stb_image;../../vendor/assimp/include;../../vendor/imgui</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -82,6 +82,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\vendor\imgui\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="..\..\vendor\imgui\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="Client\App\CustomLayer.h" />
     <ClInclude Include="Engine\Application.h" />
     <ClInclude Include="Engine\Camera.h" />
@@ -92,10 +94,12 @@
     <ClInclude Include="Engine\KeyEvents.h" />
     <ClInclude Include="Engine\Layer.h" />
     <ClInclude Include="Engine\LayerStack.h" />
+    <ClInclude Include="Engine\Mesh.h" />
     <ClInclude Include="Engine\Model.h" />
     <ClInclude Include="Engine\MouseCodes.h" />
     <ClInclude Include="Engine\MouseEvents.h" />
     <ClInclude Include="Engine\Light.h" />
+    <ClInclude Include="Engine\NormalMesh.h" />
     <ClInclude Include="Engine\Renderer\Material.h" />
     <ClInclude Include="Engine\Renderer\MaterialInstance.h" />
     <ClInclude Include="Engine\Renderer\OpenGLContext.h" />
@@ -118,6 +122,8 @@
     <ClInclude Include="Engine\WindowEvents.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\vendor\imgui\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\..\vendor\imgui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Client\main.cpp" />
     <ClCompile Include="Engine\Application.cpp" />
     <ClCompile Include="Engine\LayerStack.cpp" />

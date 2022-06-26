@@ -41,8 +41,10 @@ public:
 	inline bool IsInCategory(EventCategory category) {
 		return GetCategoryFlags() & category;
 	}
-protected:
+
 	bool Handled = false;
+protected:
+	
 };
 
 class EventDispatcher {
